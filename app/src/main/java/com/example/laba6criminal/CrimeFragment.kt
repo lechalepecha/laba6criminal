@@ -1,4 +1,5 @@
 package com.example.laba6criminal
+
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
