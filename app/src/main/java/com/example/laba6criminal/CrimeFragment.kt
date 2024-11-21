@@ -10,6 +10,8 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.util.Log
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -25,14 +27,16 @@ class CrimeFragment : Fragment() {
     private lateinit var tittleField: EditText
     private lateinit var buttonDate: Button
     private lateinit var chekIsSolved: CheckBox
+    private val crimeDetailViewModel : CrimeDetailViewModel by lazy {
+        ViewModelProviders.of(this).get(CrimeDetailViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crime = Crime()
 
-        val crimeId: UUID =
-            arguments?.getSerializable(ARG_CRIME_ID) as UUID
-        Log.d(TAG, "args bundle crime ID: $crimeId")
+        val crimeId: UUID = arguments?.getSerializable(ARG_CRIME_ID) as UUID
+        crimeDetailViewModel.loadCrime(crimeId)
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ):View? {
 
@@ -44,6 +48,17 @@ class CrimeFragment : Fragment() {
                             isEnabled = false
                           }
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        crimeDetailViewModel.crimeLiveData.observe(
+            viewLifecycleOwner,
+            Observer { crime -> crime?.let {
+                this.crime = crime
+                updateUI()
+            }
+            })
     }
 
     override fun onStart() {
@@ -66,6 +81,15 @@ class CrimeFragment : Fragment() {
         tittleField.addTextChangedListener(titlWatcher)
         chekIsSolved.apply {
             setOnCheckedChangeListener{ _, isChecked-> crime.isSolved = isChecked}
+        }
+    }
+
+    private fun updateUI() {
+        tittleField.setText(crime.title)
+        buttonDate.text = crime.date.toString()
+        chekIsSolved.apply {
+            isChecked = crime.isSolved
+            jumpDrawablesToCurrentState()
         }
     }
 
