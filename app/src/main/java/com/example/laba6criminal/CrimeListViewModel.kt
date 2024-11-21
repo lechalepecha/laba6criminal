@@ -1,4 +1,4 @@
-package com.example.laba6criminal
+package com.bignerdranch.android.laba6criminal
 
 import androidx.lifecycle.ViewModel
 
