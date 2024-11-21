@@ -1,4 +1,4 @@
-package com.bignerdranch.android.laba6criminal
+package com.example.laba6criminal
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date

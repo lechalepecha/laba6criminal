@@ -1,4 +1,4 @@
-package com.bignerdranch.android.laba6criminal.database
+package com.example.laba6criminal.database
 import androidx.room.TypeConverter
 import java.util.Date
 import java.util.UUID

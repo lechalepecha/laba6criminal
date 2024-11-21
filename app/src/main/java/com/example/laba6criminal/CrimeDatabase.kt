@@ -1,4 +1,4 @@
-package com.bignerdranch.android.laba6criminal.database
+package com.example.laba6criminal.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
