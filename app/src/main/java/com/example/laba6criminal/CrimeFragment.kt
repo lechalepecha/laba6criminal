@@ -21,6 +21,8 @@ import java.util.UUID
 
 private const val TAG = "CrimeFragment"
 private const val ARG_CRIME_ID = "crime_id"
+private const val DIALOG_DATE = "DialogDate"
+
 
 class CrimeFragment : Fragment() {
     private lateinit var crime: Crime
@@ -44,9 +46,7 @@ class CrimeFragment : Fragment() {
         tittleField = view.findViewById(R.id.crimeTitle) as EditText
         buttonDate = view.findViewById(R.id.dateCrime) as Button
         chekIsSolved = view.findViewById(R.id.isSolved) as CheckBox
-        buttonDate.apply { text = crime.date.toString()
-                            isEnabled = false
-                          }
+
         return view
     }
 
@@ -95,6 +95,12 @@ class CrimeFragment : Fragment() {
         chekIsSolved.apply {
             isChecked = crime.isSolved
             jumpDrawablesToCurrentState()
+        }
+
+        buttonDate.setOnClickListener {
+            DatePickerFragment().apply {
+                show(this@CrimeFragment.requireFragmentManager(), DIALOG_DATE)
+            }
         }
     }
 
