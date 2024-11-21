@@ -17,14 +17,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import java.util.Date
 import java.util.UUID
 
 private const val TAG = "CrimeFragment"
 private const val ARG_CRIME_ID = "crime_id"
 private const val DIALOG_DATE = "DialogDate"
+private const val REQUEST_DATE = 0
 
-
-class CrimeFragment : Fragment() {
+class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
     private lateinit var crime: Crime
     private lateinit var tittleField: EditText
     private lateinit var buttonDate: Button
@@ -82,6 +83,13 @@ class CrimeFragment : Fragment() {
         chekIsSolved.apply {
             setOnCheckedChangeListener{ _, isChecked-> crime.isSolved = isChecked}
         }
+
+        buttonDate.setOnClickListener {
+            DatePickerFragment.newInstance(crime.date).apply {
+                setTargetFragment(this@CrimeFragment, REQUEST_DATE)
+                show(this@CrimeFragment.requireFragmentManager(), DIALOG_DATE)
+            }
+        }
     }
 
     override fun onStop() {
@@ -89,7 +97,12 @@ class CrimeFragment : Fragment() {
         crimeDetailViewModel.saveCrime(crime)
     }
 
-    private fun updateUI() {
+    override fun onDateSelected(date: Date) {
+        crime.date = date
+        updateUI()
+    }
+
+        private fun updateUI() {
         tittleField.setText(crime.title)
         buttonDate.text = crime.date.toString()
         chekIsSolved.apply {
@@ -97,11 +110,6 @@ class CrimeFragment : Fragment() {
             jumpDrawablesToCurrentState()
         }
 
-        buttonDate.setOnClickListener {
-            DatePickerFragment().apply {
-                show(this@CrimeFragment.requireFragmentManager(), DIALOG_DATE)
-            }
-        }
     }
 
     companion object {
